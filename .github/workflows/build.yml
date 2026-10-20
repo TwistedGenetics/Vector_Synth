@@ -5,6 +5,8 @@ on:
     branches: [main]
     tags: ['v*']
   pull_request:
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -37,10 +39,11 @@ jobs:
             test/out/*.wav
 
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          name: VectorFM ${{ github.ref_name }}
+          tag_name: ${{ github.event.release.tag_name || github.ref_name }}
+          name: VectorFM ${{ github.event.release.tag_name || github.ref_name }}
           files: dist/VectorFM.nts1mkiiunit
           body: |
             VectorFM oscillator for the Korg NTS-1 digital kit mkII.
