@@ -1,7 +1,8 @@
 # toolchain and SDK fetched by build.sh
 .deps/
-# build output (dist/ is kept so the unit can be downloaded from GitHub)
+# build output (downloads come from GitHub Releases)
 vectorfm/build/
+dist/
 # desktop test artefacts
 test/render
 test/out/

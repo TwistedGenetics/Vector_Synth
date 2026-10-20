@@ -1,0 +1,50 @@
+name: Build VectorFM
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache toolchain and logue SDK
+        uses: actions/cache@v4
+        with:
+          path: .deps
+          key: deps-${{ runner.os }}-${{ hashFiles('build.sh') }}
+
+      - name: Build unit
+        run: ./build.sh
+
+      - name: Run DSP tests
+        run: ./test/run.sh
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VectorFM-nts1mkii
+          path: |
+            dist/VectorFM.nts1mkiiunit
+            test/out/*.wav
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: VectorFM ${{ github.ref_name }}
+          files: dist/VectorFM.nts1mkiiunit
+          body: |
+            VectorFM oscillator for the Korg NTS-1 digital kit mkII.
+
+            **Install:** download `VectorFM.nts1mkiiunit` below, open KORG KONTROL Editor with the NTS-1 mkII connected, drag the file onto the **oscillator** list and press **SEND**.
+
+            Controls and test checklist: see the [README](https://github.com/${{ github.repository }}#readme).
