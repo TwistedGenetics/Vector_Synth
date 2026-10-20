@@ -56,7 +56,7 @@ Start from the default settings (everything 0, FM INDEX 50 %, RATIO 1, MODE CLSC
 
 ## Building
 
-GitHub Actions builds and tests the unit on every push (the latest build is under the **Actions** tab, as an artifact). To publish a new version, create a Release on GitHub (Releases → Draft a new release, tag e.g. `v1.0.1`) or push a `v*` tag — Actions builds it and attaches the unit file.
+GitHub Actions builds and tests the unit on every push (the latest build is under the **Actions** tab, as an artifact). Releases are automatic: when the `.version` in `vectorfm/header.c` changes (e.g. `0x00010001U` = 1.0.1) and is pushed to main, Actions builds, tests and publishes a new Release with the unit file. Pushes that keep the same version refresh that Release's file.
 
 To build locally instead (no Docker needed, Linux or macOS):
 

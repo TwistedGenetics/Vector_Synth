@@ -38,12 +38,31 @@ jobs:
             dist/VectorFM.nts1mkiiunit
             test/out/*.wav
 
+      - name: Read unit version from header.c
+        id: ver
+        run: |
+          hex=$(grep -oE '\.version = 0x[0-9A-Fa-f]+' vectorfm/header.c | grep -oE '0x[0-9A-Fa-f]+')
+          v=$(( hex ))
+          tag="v$(( (v >> 16) & 0xFF )).$(( (v >> 8) & 0xFF )).$(( v & 0xFF ))"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Unit version $tag"
+
+      # New version on main -> new Release. Re-runs of an existing version just update its file.
       - name: Publish release
-        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
+        if: >-
+          github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') ||
+          (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.release.tag_name || github.ref_name }}
-          name: VectorFM ${{ github.event.release.tag_name || github.ref_name }}
+          tag_name: ${{ github.event.release.tag_name || (startsWith(github.ref, 'refs/tags/v') && github.ref_name) || steps.ver.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: VectorFM ${{ github.event.release.tag_name || (startsWith(github.ref, 'refs/tags/v') && github.ref_name) || steps.ver.outputs.tag }}
+          make_latest: true
           files: dist/VectorFM.nts1mkiiunit
           body: |
             VectorFM oscillator for the Korg NTS-1 digital kit mkII.
