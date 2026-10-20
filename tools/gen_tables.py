@@ -6,7 +6,7 @@ Six procedural shapes, each rendered additively at 7 mip levels
 with one guard sample for interpolation. Stored as int16 to fit the
 NTS-1 mkII 48KB oscillator budget.
 
-Usage: python3 tools/gen_tables.py > vectorfm/tables.h
+Usage: python3 tools/gen_tables.py > core/tables.h
 """
 import math
 

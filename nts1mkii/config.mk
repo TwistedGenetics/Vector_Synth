@@ -16,7 +16,7 @@ UASMSRC =
 UASMXSRC =
 
 # Include directories
-UINCDIR =
+UINCDIR = $(PROJECT_ROOT)/../core
 
 # Library directories
 ULIBDIR =

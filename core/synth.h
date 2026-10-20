@@ -7,8 +7,9 @@
  * Two oscillators (detuned, osc 2 reads an offset scan position) are
  * crossfaded by MORPH, then wavefolded and soft-saturated.
  *
- * This header has no hardware dependencies so it can be rendered on a
- * desktop machine for testing (see test/render.cc).
+ * Shared by the NTS-1 mkII unit (one mono voice) and the microKORG 2 unit
+ * (one VectorFM instance per voice). No hardware dependencies, so it can also
+ * be rendered on a desktop machine for testing (see test/render.cc).
  */
 
 #include <stdint.h>
@@ -73,6 +74,7 @@ class VectorFM {
     param_[kIndex] = 0.5f;
     w0_ = 440.f / 48000.f;
     lfo_ = 0.f;
+    mod_fm_ = mod_morph_ = mod_fold_ = 0.f;
     move_phase_ = 0.f;
     scan_z_ = depth_z_ = morph_z_ = fold_z_ = sat_z_ = 0.f;
     first_block_ = true;
@@ -90,8 +92,19 @@ class VectorFM {
 
   // w0: fundamental in cycles per sample
   void setPitch(float w0) { w0_ = w0; }
-  // lfo: -1..1
+  // Scan modulation, -1..1 (NTS-1 shape LFO, microKORG 2 virtual patch)
   void setShapeLfo(float lfo) { lfo_ = lfo; }
+  // Extra modulation offsets (microKORG 2 virtual patch), roughly -1..1,
+  // added to the FM knob, MORPH and WAVEFOLD before clamping.
+  void setMod(float fm, float morph, float fold) {
+    mod_fm_ = fm;
+    mod_morph_ = morph;
+    mod_fold_ = fold;
+  }
+
+  // Movement LFO phase, so polyphonic voices can share one LFO
+  float movePhase() const { return move_phase_; }
+  void setMovePhase(float p) { move_phase_ = p; }
 
   void setParam(int id, int32_t value) {
     switch (id) {
@@ -111,7 +124,8 @@ class VectorFM {
     }
   }
 
-  void process(float *out, uint32_t frames) {
+  // Writes frames samples to out[0], out[stride], out[2*stride]... scaled by gain.
+  void process(float *out, uint32_t frames, uint32_t stride = 1, float gain = 1.f) {
     if (frames == 0) return;
     const float inv_frames = 1.f / frames;
     const float ratio = kRatioValues[ratio_idx_];
@@ -131,7 +145,7 @@ class VectorFM {
     const float mw2 = clampf(w2 * ratio, 0.f, 0.49f);
 
     // --- FM depth (in cycles) ---
-    const float b = param_[kFm];
+    const float b = clampf(param_[kFm] + mod_fm_, 0.f, 1.f);
     const float b2 = b * b;  // finer control at low settings
     float depth_t;
     float fb_amt = 0.f;
@@ -163,8 +177,8 @@ class VectorFM {
 
     // --- Parameter ramps for this block ---
     const float scan_t = param_[kScan] + lfo_ * 0.5f + move_t;
-    const float morph_t = param_[kMorph];
-    float fold_t = param_[kFold];
+    const float morph_t = clampf(param_[kMorph] + mod_morph_, 0.f, 1.f);
+    const float fold_t = clampf(param_[kFold] + mod_fold_, 0.f, 1.f);
     const float sat_t = param_[kSat];
     if (first_block_) {
       scan_z_ = scan_t;
@@ -246,7 +260,7 @@ class VectorFM {
         y += wet * (s - y);
       }
 
-      out[i] = limit(y);
+      out[i * stride] = limit(y) * gain;
 
       ph1 = wrap01(ph1 + w1);
       ph2 = wrap01(ph2 + w2);
@@ -350,6 +364,7 @@ class VectorFM {
   int mode_;
   float w0_;
   float lfo_;
+  float mod_fm_, mod_morph_, mod_fold_;
   float move_phase_;
   float scan_z_, depth_z_, morph_z_, fold_z_, sat_z_;
   bool first_block_;

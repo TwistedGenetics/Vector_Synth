@@ -24,10 +24,19 @@ jobs:
           path: .deps
           key: deps-${{ runner.os }}-${{ hashFiles('build.sh') }}
 
-      - name: Build unit (Arm GCC 10.3-2021.10, same as Korg's SDK)
-        run: ./build.sh
+      # NTS-1 mkII: Arm GCC 10.3-2021.10. microKORG 2: Korg's gnueabihf toolchain.
+      # Strict mode: fail rather than fall back to a different compiler.
+      - name: Build units (Korg's toolchains)
+        run: ./build.sh all
         env:
-          VFM_TOOLCHAIN: arm
+          VFM_STRICT: "1"
+
+      - name: Check both units have the same version
+        run: |
+          a=$(grep -oE '\.version = 0x[0-9A-Fa-f]+' nts1mkii/header.c)
+          b=$(grep -oE '\.version = 0x[0-9A-Fa-f]+' microkorg2/header.c)
+          echo "NTS-1 mkII: $a / microKORG 2: $b"
+          [ "$a" = "$b" ]
 
       # Korg's own example oscillator built with the same toolchain: a known-good
       # unit for checking KORG KONTROL Editor / hardware issues.
@@ -42,15 +51,16 @@ jobs:
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
-          name: VectorFM-nts1mkii
+          name: VectorFM-units
           path: |
             dist/*.nts1mkiiunit
+            dist/*.mk2unit
             test/out/*.wav
 
       - name: Read unit version from header.c
         id: ver
         run: |
-          hex=$(grep -oE '\.version = 0x[0-9A-Fa-f]+' vectorfm/header.c | grep -oE '0x[0-9A-Fa-f]+')
+          hex=$(grep -oE '\.version = 0x[0-9A-Fa-f]+' nts1mkii/header.c | grep -oE '0x[0-9A-Fa-f]+')
           v=$(( hex ))
           tag="v$(( (v >> 16) & 0xFF )).$(( (v >> 8) & 0xFF )).$(( v & 0xFF ))"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
@@ -72,10 +82,14 @@ jobs:
           target_commitish: ${{ github.sha }}
           name: VectorFM ${{ github.event.release.tag_name || (startsWith(github.ref, 'refs/tags/v') && github.ref_name) || steps.ver.outputs.tag }}
           make_latest: true
-          files: dist/VectorFM.nts1mkiiunit
+          files: |
+            dist/VectorFM.nts1mkiiunit
+            dist/VectorFM.mk2unit
           body: |
-            VectorFM oscillator for the Korg NTS-1 digital kit mkII.
+            VectorFM wavetable/FM oscillator for the Korg NTS-1 digital kit mkII and microKORG 2.
 
-            **Install:** download `VectorFM.nts1mkiiunit` below, open KORG KONTROL Editor with the NTS-1 mkII connected, drag the file onto the **oscillator** list and press **SEND**.
+            **NTS-1 mkII** — download `VectorFM.nts1mkiiunit`, open KORG KONTROL Editor with the NTS-1 mkII connected, drag the file onto the **oscillator** list and press **SEND**.
+
+            **microKORG 2** (firmware 2.0.0 or later) — download `VectorFM.mk2unit` and load it as a user oscillator (see the README for the steps).
 
             Controls and test checklist: see the [README](https://github.com/${{ github.repository }}#readme).

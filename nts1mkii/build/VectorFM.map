@@ -1,0 +1,305 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /home/claude/vector_synth/nts1mkii//build/obj/header.o
+LOAD /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+LOAD /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                0x0000000000000000                __heap_size = 0x0
+                0x0000000000000000                __stack_size = 0x0
+                0x00000000000000d4                . = SIZEOF_HEADERS
+
+.hash           0x00000000000000d4       0xdc
+ *(.hash)
+ .hash          0x00000000000000d4       0xdc /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.dynsym         0x00000000000001b0      0x240
+ *(.dynsym)
+ .dynsym        0x00000000000001b0      0x240 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.dynstr         0x00000000000003f0      0x1bb
+ *(.dynstr)
+ .dynstr        0x00000000000003f0      0x1bb /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.rel.dyn        0x00000000000005ac       0x10
+ *(.rel.dyn)
+ .rel.got       0x00000000000005ac       0x10 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .rel.iplt      0x00000000000005bc        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.rel.plt        0x00000000000005bc        0x0
+ *(.rel.plt)
+ .rel.plt       0x00000000000005bc        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.text           0x00000000000005bc     0x6164
+ *(.text)
+ .text          0x00000000000005bc        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .text          0x00000000000005bc       0x2a /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ *fill*         0x00000000000005e6        0x2 
+ .text          0x00000000000005e8      0xc98 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                0x000000000000088c                unit_init
+                0x0000000000000974                unit_teardown
+                0x0000000000000976                unit_reset
+                0x000000000000099c                unit_resume
+                0x000000000000099e                unit_suspend
+                0x00000000000009a0                unit_render
+                0x0000000000001138                unit_set_param_value
+                0x0000000000001188                unit_get_param_value
+                0x00000000000011a4                unit_get_param_str_value
+                0x000000000000124c                unit_note_on
+                0x0000000000001270                unit_note_off
+                0x0000000000001272                unit_all_note_off
+                0x0000000000001274                unit_set_tempo
+                0x0000000000001276                unit_tempo_4ppqn_tick
+                0x0000000000001278                unit_pitch_bend
+                0x000000000000127a                unit_channel_pressure
+                0x000000000000127c                unit_aftertouch
+ *(.text.*)
+ *(.init)
+ *(.fini)
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
+ *(SORT_BY_NAME(.ctors.*))
+ *(.ctors)
+ *(.rodata)
+ .rodata        0x0000000000001280     0x5478 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+ *(.rodata.*)
+ .rodata.str1.1
+                0x00000000000066f8       0x28 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                         0x2a (size before relaxing)
+
+.glue_7         0x0000000000006720        0x0
+ .glue_7        0x0000000000006720        0x0 linker stubs
+
+.glue_7t        0x0000000000006720        0x0
+ .glue_7t       0x0000000000006720        0x0 linker stubs
+
+.vfp11_veneer   0x0000000000006720        0x0
+ .vfp11_veneer  0x0000000000006720        0x0 linker stubs
+
+.v4_bx          0x0000000000006720        0x0
+ .v4_bx         0x0000000000006720        0x0 linker stubs
+
+.plt            0x0000000000006720        0x0
+ .plt           0x0000000000006720        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.iplt           0x0000000000006720        0x0
+ .iplt          0x0000000000006720        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.unit_header    0x0000000000006720      0x330
+                0x0000000000006720                . = ALIGN (0x8)
+ *(.unit_header)
+ .unit_header   0x0000000000006720      0x198 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                0x0000000000006720                unit_header
+ .unit_header   0x00000000000068b8      0x198 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+
+.gnu.version_d  0x0000000000006a50        0x0
+ .gnu.version_d
+                0x0000000000006a50        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.gnu.version    0x0000000000006a50        0x0
+ .gnu.version   0x0000000000006a50        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.gnu.version_r  0x0000000000006a50        0x0
+ .gnu.version_r
+                0x0000000000006a50        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.preinit_array  0x0000000000006a50        0x0
+                0x0000000000006a50                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__preinit_array_start = .)
+ *(.preinit_array)
+                [!provide]                        PROVIDE (__preinit_array_end = .)
+
+.init_array     0x0000000000006a50        0x0
+                0x0000000000006a50                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__init_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.init_array.*))
+ *(.init_array)
+                [!provide]                        PROVIDE (__init_array_end = .)
+
+.dynamic        0x0000000000006a50       0x70
+                0x0000000000006a50                . = ALIGN (0x8)
+ *(.dynamic)
+ .dynamic       0x0000000000006a50       0x70 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                0x0000000000006a50                _DYNAMIC
+
+.got            0x0000000000006ac0       0x14
+ *(.got.plt)
+ .got.plt       0x0000000000006ac0        0xc /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                0x0000000000006ac0                _GLOBAL_OFFSET_TABLE_
+ *(.igot.plt)
+ .igot.plt      0x0000000000006acc        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ *(.got)
+ .got           0x0000000000006acc        0x8 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ *(.igot)
+
+.data           0x0000000000006ad4        0x0
+                0x0000000000006ad4                . = ALIGN (0x4)
+                0x0000000000006ad4                __data_start__ = .
+ *(vtable)
+ *(.data)
+ .data          0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .data          0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .data          0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+ *(.data.*)
+ .data.rel.ro   0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                0x0000000000006ad4                . = ALIGN (0x4)
+                0x0000000000006ad4                __data_end__ = .
+
+.bss            0x0000000000006ad4       0xb4
+                0x0000000000006ad4                . = ALIGN (0x4)
+                0x0000000000006ad4                __bss_start__ = .
+ *(.bss)
+ .bss           0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .bss           0x0000000000006ad4        0x0 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .bss           0x0000000000006ad4       0xb4 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+ *(.bss.*)
+ *(COMMON)
+                0x0000000000006b88                . = ALIGN (0x4)
+                0x0000000000006b88                __bss_end__ = .
+
+.dynbss         0x0000000000006b88        0x0
+ .dynbss        0x0000000000006b88        0x0 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+
+.stack          0x0000000000006b90        0x4
+                0x0000000000006b90                . = ALIGN (0x10)
+                0x0000000000006b90                __HEAP = .
+                0x0000000000006b90                _end = .
+                0x0000000000006b90                end = .
+                0x0000000000006b90                . = (. + __heap_size)
+                0x0000000000006b90                __HEAP_END = .
+                0x0000000000006b90                _stack_end = .
+                0x0000000000006b90                . = (. + __stack_size)
+                0x0000000000006b90                _stack_addr = .
+                0x0000000000006b90                __stack = .
+                0x0000000000006b90                __SP_INIT = .
+                0x0000000000006b94                . = (. + 0x4)
+ *fill*         0x0000000000006b90        0x4 
+
+/DISCARD/
+ *(.fini_array.* .fini_array .dtors.* .dtors)
+ *(.note.GNU-stack)
+ *(.gnu_debuglink)
+ *(.gnu.lto_*)
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a
+START GROUP
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a
+END GROUP
+START GROUP
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a
+END GROUP
+START GROUP
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a
+LOAD /home/claude/vector_synth/.deps/xpack-arm-none-eabi-gcc-10.3.1-2.3/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a
+END GROUP
+OUTPUT(/home/claude/vector_synth/nts1mkii//build/VectorFM.elf elf32-littlearm)
+LOAD linker stubs
+
+.debug_info     0x0000000000000000     0x498a
+ .debug_info    0x0000000000000000      0x3d4 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .debug_info    0x00000000000003d4      0x7bd /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_info    0x0000000000000b91     0x3df9 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_abbrev   0x0000000000000000      0xaf8
+ .debug_abbrev  0x0000000000000000      0x11b /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .debug_abbrev  0x000000000000011b      0x2d4 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_abbrev  0x00000000000003ef      0x709 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_aranges  0x0000000000000000       0x58
+ .debug_aranges
+                0x0000000000000000       0x18 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .debug_aranges
+                0x0000000000000018       0x20 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_aranges
+                0x0000000000000038       0x20 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_line     0x0000000000000000     0x1713
+ .debug_line    0x0000000000000000      0x164 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .debug_line    0x0000000000000164      0x2a9 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_line    0x000000000000040d     0x1306 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_str      0x0000000000000000     0x18da
+ .debug_str     0x0000000000000000      0x63c /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                                        0x6bf (size before relaxing)
+ .debug_str     0x000000000000063c      0x33c /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+                                        0x85d (size before relaxing)
+ .debug_str     0x0000000000000978      0xf62 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                       0x165f (size before relaxing)
+
+.comment        0x0000000000000000       0x43
+ .comment       0x0000000000000000       0x43 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                                         0x44 (size before relaxing)
+ .comment       0x0000000000000043       0x44 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .comment       0x0000000000000043       0x44 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.ARM.attributes
+                0x0000000000000000       0x34
+ .ARM.attributes
+                0x0000000000000000       0x34 /home/claude/vector_synth/nts1mkii//build/obj/header.o
+ .ARM.attributes
+                0x0000000000000034       0x34 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .ARM.attributes
+                0x0000000000000068       0x34 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_loc      0x0000000000000000     0x218a
+ .debug_loc     0x0000000000000000       0x6f /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_loc     0x000000000000006f     0x211b /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_frame    0x0000000000000000      0x36c
+ .debug_frame   0x0000000000000000      0x120 /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+ .debug_frame   0x0000000000000120      0x24c /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+.debug_ranges   0x0000000000000000      0x3c0
+ .debug_ranges  0x0000000000000000      0x3c0 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+
+Cross Reference Table
+
+Symbol                                            File
+_DYNAMIC                                          /home/claude/vector_synth/nts1mkii//build/obj/header.o
+_GLOBAL_OFFSET_TABLE_                             /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+midi_to_hz_lut_f                                  /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+unit_aftertouch                                   /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_all_note_off                                 /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_channel_pressure                             /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_get_param_str_value                          /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_get_param_value                              /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_header                                       /home/claude/vector_synth/nts1mkii//build/obj/header.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+unit_init                                         /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_note_off                                     /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_note_on                                      /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_pitch_bend                                   /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_render                                       /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_reset                                        /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_resume                                       /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_set_param_value                              /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_set_tempo                                    /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_suspend                                      /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_teardown                                     /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
+unit_tempo_4ppqn_tick                             /home/claude/vector_synth/nts1mkii//build/obj/unit.o
+                                                  /home/claude/vector_synth/nts1mkii//build/obj/_unit_base.o
