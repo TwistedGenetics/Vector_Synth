@@ -92,7 +92,7 @@ int main() {
     if (!ok) ++failures;
   };
 
-  system("mkdir -p test/out");
+  if (system("mkdir -p test/out") != 0) return 1;
 
   // 1. Scan sweep across all six shapes
   v.init();

@@ -24,8 +24,17 @@ jobs:
           path: .deps
           key: deps-${{ runner.os }}-${{ hashFiles('build.sh') }}
 
-      - name: Build unit
+      - name: Build unit (Arm GCC 10.3-2021.10, same as Korg's SDK)
         run: ./build.sh
+        env:
+          VFM_TOOLCHAIN: arm
+
+      # Korg's own example oscillator built with the same toolchain: a known-good
+      # unit for checking KORG KONTROL Editor / hardware issues.
+      - name: Build Korg "waves" example for comparison
+        run: |
+          make -C .deps/logue-sdk/platform/nts-1_mkii/waves install \
+            GCC_BIN_PATH="$PWD/.deps/gcc-arm-none-eabi-10.3-2021.10/bin" INSTALLDIR="$PWD/dist"
 
       - name: Run DSP tests
         run: ./test/run.sh
@@ -35,7 +44,7 @@ jobs:
         with:
           name: VectorFM-nts1mkii
           path: |
-            dist/VectorFM.nts1mkiiunit
+            dist/*.nts1mkiiunit
             test/out/*.wav
 
       - name: Read unit version from header.c

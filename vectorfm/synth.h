@@ -15,6 +15,12 @@
 #include "utils/float_math.h"
 #include "tables.h"
 
+// Anonymous namespace: keeps every DSP symbol internal to the unit so the
+// .nts1mkiiunit only exports the logue SDK callbacks (like Korg's examples).
+namespace {
+
+constexpr float kRatioValues[9] = {0.5f, 1.f, 1.5f, 2.f, 3.f, 4.f, 5.f, 7.f, 8.f};
+
 class VectorFM {
  public:
   enum Param {
@@ -35,17 +41,33 @@ class VectorFM {
 
   static constexpr int kNumRatios = 9;
 
+  // switch rather than pointer tables: no data relocations in the unit
   static const char *ratioName(int i) {
-    static const char *names[kNumRatios] = {"0.5", "1", "1.5", "2", "3", "4", "5", "7", "8"};
-    return names[clampi(i, 0, kNumRatios - 1)];
+    switch (i) {
+      case 0: return "0.5";
+      case 1: return "1";
+      case 2: return "1.5";
+      case 3: return "2";
+      case 4: return "3";
+      case 5: return "4";
+      case 6: return "5";
+      case 7: return "7";
+      default: return "8";
+    }
   }
   static const char *modeName(int i) {
-    static const char *names[kNumModes] = {"CLSC", "FDBK", "CROS", "FOLD"};
-    return names[clampi(i, 0, kNumModes - 1)];
+    switch (i) {
+      case 0: return "CLSC";
+      case 1: return "FDBK";
+      case 2: return "CROS";
+      default: return "FOLD";
+    }
   }
 
   void init() {
-    for (int i = 0; i < kNumParams; ++i) param_[i] = 0.f;
+    // explicit stores (a loop here gets turned into a memset call)
+    param_[kScan] = param_[kFm] = param_[kRatio] = param_[kIndex] = param_[kFold] = 0.f;
+    param_[kMorph] = param_[kDetune] = param_[kSat] = param_[kMove] = param_[kMode] = 0.f;
     ratio_idx_ = 1;
     mode_ = kClassic;
     param_[kIndex] = 0.5f;
@@ -92,8 +114,7 @@ class VectorFM {
   void process(float *out, uint32_t frames) {
     if (frames == 0) return;
     const float inv_frames = 1.f / frames;
-    static const float ratios[kNumRatios] = {0.5f, 1.f, 1.5f, 2.f, 3.f, 4.f, 5.f, 7.f, 8.f};
-    const float ratio = ratios[ratio_idx_];
+    const float ratio = kRatioValues[ratio_idx_];
     const int mode = mode_;
 
     // --- Pitch / detune (osc 1 down, osc 2 up, up to +-25 cents) ---
@@ -336,3 +357,5 @@ class VectorFM {
   float fb_[2][2];
   float prev_[2];
 };
+
+}  // namespace

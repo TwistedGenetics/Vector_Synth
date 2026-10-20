@@ -9,7 +9,7 @@
 #include "synth.h"
 
 static VectorFM s_synth;
-static int32_t s_cached[UNIT_OSC_MAX_PARAM_COUNT];
+static int32_t s_cached[VectorFM::kNumParams];
 static const unit_runtime_osc_context_t *s_context;
 
 #define q31_to_f32_c 4.65661287307739e-010f
@@ -25,9 +25,9 @@ __unit_callback int8_t unit_init(const unit_runtime_desc_t *desc) {
   s_context = static_cast<const unit_runtime_osc_context_t *>(desc->hooks.runtime_context);
 
   s_synth.init();
-  for (int id = 0; id < UNIT_OSC_MAX_PARAM_COUNT; ++id) {
+  for (int id = 0; id < VectorFM::kNumParams; ++id) {
     s_cached[id] = static_cast<int32_t>(unit_header.params[id].init);
-    if (id < VectorFM::kNumParams) s_synth.setParam(id, s_cached[id]);
+    s_synth.setParam(id, s_cached[id]);
   }
   return k_unit_err_none;
 }
@@ -55,7 +55,7 @@ __unit_callback void unit_set_param_value(uint8_t id, int32_t value) {
 }
 
 __unit_callback int32_t unit_get_param_value(uint8_t id) {
-  if (id >= UNIT_OSC_MAX_PARAM_COUNT) return 0;
+  if (id >= VectorFM::kNumParams) return 0;
   return s_cached[id];
 }
 
